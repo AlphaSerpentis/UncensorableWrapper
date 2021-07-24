@@ -23,14 +23,14 @@ contract UncensorableToken is ERC20Upgradeable, ReentrancyGuardUpgradeable {
         underlyingToken = _whoAreWeWrapping;
     }
 
-    function wrap(uint256 _amount) external {
+    function wrap(uint256 _amount) external nonReentrant() {
         IERC20(underlyingToken).safeTransferFrom(msg.sender, address(this), _amount);
         _mint(msg.sender, _amount);
 
         emit Wrapped(_amount);
     }
 
-    function unwrap(uint256 _amount) external {
+    function unwrap(uint256 _amount) external nonReentrant() {
         IERC20(underlyingToken).safeTransfer(msg.sender, _amount);
         _burn(msg.sender, _amount);
 
